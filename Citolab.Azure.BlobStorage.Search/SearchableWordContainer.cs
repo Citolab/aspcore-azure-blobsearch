@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Citolab.Azure.BlobStorage.Search.Helpers;
 using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
 
 namespace Citolab.Azure.BlobStorage.Search
 {
-    public class SearchableWordBlob : WordBlob
+    public class SearchableWordContainer : WordContainer
     {
         private readonly Uri _searchUrl;
         private readonly string _indexName;
         private readonly string _searchApiKey;
 
-        public SearchableWordBlob(string blobConnectionString, string container, Uri searchUrl,  string indexName, string searchApiKey) : base(blobConnectionString, container)
+        public SearchableWordContainer(string blobConnectionString, string container, Uri searchUrl,  string indexName, string searchApiKey) : base(blobConnectionString, container)
         {
             _searchUrl = searchUrl;
             _indexName = indexName;

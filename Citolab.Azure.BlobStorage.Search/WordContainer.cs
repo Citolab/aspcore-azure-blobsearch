@@ -1,21 +1,24 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using Citolab.Azure.BlobStorage.Search.Helpers;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Citolab.Azure.BlobStorage.Search
 {
-    public class WordBlob
+    public class WordContainer
     {
         protected readonly CloudBlobContainer _cloudBlobContainer;
         protected readonly string _connectionString;
         protected readonly string _container;
 
-        public WordBlob(string connectionString, string container)
+        public WordContainer(string connectionString, string container)
         {
             _container = container;
             _connectionString = connectionString;
-            _cloudBlobContainer = GetCloudBlobContainer();
+            _cloudBlobContainer = CloudHelper.GetCloudBlobContainer(_connectionString, _container);
         }
 
         public Task<string> AddDocument(string filePath, bool overwrite = false) =>
@@ -27,16 +30,13 @@ namespace Citolab.Azure.BlobStorage.Search
             _cloudBlobContainer
                 .GetBlockBlobReference(blobName)
                 .UploadDocument(stream, overwrite);
-       
 
-        private CloudBlobContainer GetCloudBlobContainer()
-        {
-            var storageAccount = CloudStorageAccount.Parse(_connectionString);
-            var blobClient = storageAccount.CreateCloudBlobClient();
-            var container = blobClient.GetContainerReference(_container);
-            var _ = container.CreateIfNotExistsAsync().Result;
-            return container;
-        }
+        public string GetDocumentUrl(string containerName) =>
+            _cloudBlobContainer.Uri.ToString().AddToken(_cloudBlobContainer);
+
+        public IEnumerable<string> GetDocumentUrls(IEnumerable<string> containerNames) =>
+            containerNames.Select(GetDocumentUrl);
+
     }
 
 

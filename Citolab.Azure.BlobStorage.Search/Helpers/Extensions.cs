@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.WindowsAzure.Storage.Blob;
 
-namespace Citolab.Azure.BlobStorage.Search
+namespace Citolab.Azure.BlobStorage.Search.Helpers
 {
     public static class Extensions
     {
@@ -23,6 +23,7 @@ namespace Citolab.Azure.BlobStorage.Search
         public static string AddToken(this string url, CloudBlobContainer container) =>
             string.Concat(url, container.SharedAccessBlobPolicy());
 
+       
         public static async Task<string> UploadDocument(this CloudBlockBlob blob, string filePath, bool overwrite)
         {
             if (blob.ExistsAsync().Result && !overwrite) return await Task.FromResult(blob.Name);
