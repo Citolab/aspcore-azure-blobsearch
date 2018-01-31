@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.WindowsAzure.Storage.Blob;
 
-namespace Citolab.AzureBlobSearch.Word
+namespace Citolab.Azure.BlobStorage.Search
 {
     public static class Extensions
     {

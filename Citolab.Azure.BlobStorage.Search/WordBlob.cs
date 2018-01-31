@@ -1,10 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
-namespace Citolab.AzureBlobSearch.Word
+namespace Citolab.Azure.BlobStorage.Search
 {
     public class WordBlob
     {

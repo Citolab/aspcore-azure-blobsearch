@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
 
-namespace Citolab.AzureBlobSearch.Word
+namespace Citolab.Azure.BlobStorage.Search
 {
     public class SearchableWordBlob : WordBlob
     {
