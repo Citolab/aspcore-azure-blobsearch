@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Citolab.AzureBlobSearch.Word</id>
+    <version>$version$</version>
+    <title>Repository</title>
+    <authors>Tjeerd Hans Terpstra, Marcel Hoekstra</authors>
+    <owners>Citolab</owners>
+    <projectUrl>https://github.com/Citolab/aspcore-azure-blobsearch</projectUrl>
+    <iconUrl>https://avatars0.githubusercontent.com/u/32355044</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Library to store and search in word documents in Azure Storage.</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2018</copyright>
+    <tags>ASP.NET Core Azure Storage Word Search</tags>
+  </metadata>
+</package>
