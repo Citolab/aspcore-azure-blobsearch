@@ -24,3 +24,5 @@ var searchableWordBlob = new SearchableWordBlob(
 var container2 = searchableWordBlob.AddDocument("C:\\doc2.docx").Result;
 var uris = searchableWordBlob.Search("Keyword");
 ```
+
+The urls that are returned can be used for 7 days.
