@@ -12,13 +12,13 @@ namespace Citolab.Azure.BlobStorage.Search
     {
         protected readonly CloudBlobContainer _cloudBlobContainer;
         protected readonly string _connectionString;
-        protected readonly string _container;
+        protected readonly string _containerName;
 
-        public WordContainer(string connectionString, string container)
+        public WordContainer(string connectionString, string containerName)
         {
-            _container = container;
+            _containerName = containerName;
             _connectionString = connectionString;
-            _cloudBlobContainer = CloudHelper.GetCloudBlobContainer(_connectionString, _container);
+            _cloudBlobContainer = CloudHelper.GetCloudBlobContainer(_connectionString, _containerName);
         }
 
         public Task<string> AddDocument(string filePath, bool overwrite = false) =>

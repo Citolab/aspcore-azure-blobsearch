@@ -8,13 +8,13 @@ using Microsoft.Azure.Search.Models;
 
 namespace Citolab.Azure.BlobStorage.Search
 {
-    public class SearchableWordContainer : WordContainer
+    public class IndexedWordContainer : WordContainer
     {
         private readonly Uri _searchUrl;
         private readonly string _indexName;
         private readonly string _searchApiKey;
 
-        public SearchableWordContainer(string blobConnectionString, string container, Uri searchUrl,  string indexName, string searchApiKey) : base(blobConnectionString, container)
+        public IndexedWordContainer(string blobConnectionString, string containerName, Uri searchUrl,  string indexName, string searchApiKey) : base(blobConnectionString, containerName)
         {
             _searchUrl = searchUrl;
             _indexName = indexName;
@@ -46,8 +46,8 @@ namespace Citolab.Azure.BlobStorage.Search
             var searchService = GetServiceClient();
             var searchIndexClient = searchService.Indexes.Exists(_indexName) ? searchService.Indexes.GetClient(_indexName) : null;
             if (searchIndexClient != null) return searchIndexClient;
-            const string datasource = "wordblob_datasource";
-            const string indexer = "wordblob_indexer";
+            var datasource = $"{_containerName}_wordblob_datasource";
+            var indexer = $"{_containerName}_wordblob_indexer";
             searchService.DataSources
                 .CreateOrUpdate(datasource, DataSource.AzureBlobStorage(datasource, _connectionString, _cloudBlobContainer.Name));
             searchService.Indexes.CreateOrUpdate(_indexName, new Index(_indexName,
