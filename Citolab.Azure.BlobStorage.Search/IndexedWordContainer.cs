@@ -49,8 +49,8 @@ namespace Citolab.Azure.BlobStorage.Search
             var searchService = GetServiceClient();
             var searchIndexClient = searchService.Indexes.Exists(_indexName) ? searchService.Indexes.GetClient(_indexName) : null;
             if (searchIndexClient != null) return searchIndexClient;
-            var datasource = $"{_containerName}_wordblob_datasource";
-            var indexer = $"{_containerName}_wordblob_indexer";
+            var datasource = $"{_containerName}-wordblob-datasource";
+            var indexer = $"{_containerName}-wordblob-indexer";
             searchService.DataSources
                 .CreateOrUpdate(datasource, DataSource.AzureBlobStorage(datasource, _connectionString, _cloudBlobContainer.Name));
             searchService.Indexes.CreateOrUpdate(_indexName, new Index(_indexName,
