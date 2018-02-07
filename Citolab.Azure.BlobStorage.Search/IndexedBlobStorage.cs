@@ -19,10 +19,10 @@ namespace Citolab.Azure.BlobStorage.Search
         }
 
         public IndexedWordContainer GetOrCreateContainer(string containername) =>
-            GetOrCreateContainer(containername, $"{containername}-index");      
+            GetOrCreateContainer(containername, $"{containername}-index");
 
         public IndexedWordContainer GetOrCreateContainer(string containername, string indexName) =>
-           new  IndexedWordContainer(_blobConnectionString, _searchApiKey, _searchUrl, containername, indexName);
+           new IndexedWordContainer(_blobConnectionString, containername, _searchUrl, indexName, _searchApiKey);
 
     }
 }
