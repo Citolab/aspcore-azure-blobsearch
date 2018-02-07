@@ -21,6 +21,9 @@ namespace Citolab.Azure.BlobStorage.Search
             _cloudBlobContainer = CloudHelper.GetCloudBlobContainer(_connectionString, _containerName);
         }
 
+        public static bool Exists(string connectionString, string containerName) =>
+            CloudHelper.ContainerExists(connectionString, containerName);
+
         public Task<string> AddDocument(string filePath, bool overwrite = false) =>
             _cloudBlobContainer
                 .GetBlockBlobReference(Path.GetFileName(filePath))

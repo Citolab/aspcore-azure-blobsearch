@@ -18,6 +18,9 @@ namespace Citolab.Azure.BlobStorage.Search.Helpers
             return container;
         }
 
+        public static bool ContainerExists(string connectionString, string containerName) =>
+            GetCloudBlobClient(connectionString).GetContainerReference(containerName).ExistsAsync().Result;
+
         public static CloudBlobClient GetCloudBlobClient(string connectionString) =>
             CloudStorageAccount.Parse(connectionString).CreateCloudBlobClient();
     }

@@ -10,6 +10,8 @@ namespace Citolab.Azure.BlobStorage.Search
 {
     public class IndexedWordContainer : WordContainer
     {
+
+
         private readonly Uri _searchUrl;
         private readonly string _indexName;
         private readonly string _searchApiKey;
@@ -20,6 +22,7 @@ namespace Citolab.Azure.BlobStorage.Search
             _indexName = indexName;
             _searchApiKey = searchApiKey;
         }
+               
 
         public List<Uri> Search(string keyword) =>
             GetSearchIndexClient()
