@@ -16,14 +16,9 @@ namespace Citolab.Azure.BlobStorage.Search
             _searchUrl = searchUrl;
             _searchApiKey = searchApiKey;
         }
-        public bool ContainerExists(string containername) =>
-            WordContainer.Exists(_blobConnectionString, containername);
 
         public IndexedWordContainer GetOrCreateContainer(string containername) =>
-            GetOrCreateContainer(containername, $"{containername}-index");
-
-        public IndexedWordContainer GetOrCreateContainer(string containername, string indexName) =>
-           new IndexedWordContainer(_blobConnectionString, containername, _searchUrl, indexName, _searchApiKey);
+           new IndexedWordContainer(_blobConnectionString, containername, _searchUrl,  _searchApiKey);
 
     }
 }

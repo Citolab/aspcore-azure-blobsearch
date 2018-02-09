@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -22,25 +23,6 @@ namespace Citolab.Azure.BlobStorage.Search.Helpers
 
         public static string AddToken(this string url, CloudBlobContainer container) =>
             string.Concat(url, container.SharedAccessBlobPolicy());
-
-       
-        public static async Task<string> UploadDocument(this CloudBlockBlob blob, string filePath, bool overwrite)
-        {
-            if (blob.ExistsAsync().Result && !overwrite) return await Task.FromResult(blob.Name);
-            var taskCompletion = new TaskCompletionSource<string>();
-            var _ = blob.UploadFromFileAsync(filePath).ContinueWith(result =>
-                taskCompletion.SetResult(blob.Name));
-            return await taskCompletion.Task;
-        }
-
-        public static async Task<string> UploadDocument(this CloudBlockBlob blob, Stream stream, bool overwrite)
-        {
-            if (blob.ExistsAsync().Result && !overwrite) return await Task.FromResult(blob.Name);
-            var taskCompletion = new TaskCompletionSource<string>();
-            var _ = blob.UploadFromStreamAsync(stream).ContinueWith(result =>
-                taskCompletion.SetResult(blob.Name));
-            return await taskCompletion.Task;
-        }
 
         public static IEnumerable<Uri> ConvertToUri(this IEnumerable<string> list) =>
             list.Select(uriString => Uri.TryCreate(uriString, UriKind.Absolute, out var uri) ? uri : null)

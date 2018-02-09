@@ -5,69 +5,56 @@ using System.Threading;
 using Citolab.Azure.BlobStorage.Search.Helpers;
 using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
+using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Citolab.Azure.BlobStorage.Search
 {
-    public class IndexedWordContainer : WordContainer
+    public class IndexedWordContainer 
     {
+        public string Name => BaseContainer.Name;
 
+        public SearchServiceClient SearchServiceClient { get; set; }
+        public CloudBlobContainer BaseContainer;
+        //private readonly Uri _searchUrl;
+        //private readonly string _indexName;
+        //private readonly string _searchApiKey;
 
-        private readonly Uri _searchUrl;
-        private readonly string _indexName;
-        private readonly string _searchApiKey;
-
-        public IndexedWordContainer(string blobConnectionString, string containerName, Uri searchUrl,  string indexName, string searchApiKey) : base(blobConnectionString, containerName)
+        public IndexedWordContainer(string connectionString, string containerName, Uri searchUrl, string searchApiKey)
         {
-            _searchUrl = searchUrl;
-            _indexName = indexName;
-            _searchApiKey = searchApiKey;
+            SearchServiceClient = new SearchServiceClient(searchUrl, new SearchCredentials(searchApiKey));
+            BaseContainer = CloudHelper.GetCloudBlobContainer(connectionString, containerName);
         }
-               
 
-        public List<Uri> Search(string keyword) =>
-            GetSearchIndexClient()
+        public CloudBlockBlob GetBlockBlobReference(string name) =>
+            BaseContainer.GetBlockBlobReference(name);
+
+        public List<Uri> Search(string indexName, string keyword) =>
+                GetSearchServiceClient(indexName)
                 .Documents
                 .Search(keyword)
                 .Results.Select(r =>
                     r.Document["metadata_storage_path"]
                         .ToString()
                         .DecodeStoragePath()
-                        .AddToken(_cloudBlobContainer))
+                        .AddToken(BaseContainer))
                 .ConvertToUri()
                 .ToList();
 
-        private SearchServiceClient GetServiceClient() =>
-            new SearchServiceClient(_searchUrl, new SearchCredentials(_searchApiKey));
 
-        /// <summary>
-        /// This function gets the SearchIndexClient by index name.
-        /// If the index does not exist it's going to create a datasource, index and indexer.
-        /// </summary>
-        /// <returns></returns>
-        private ISearchIndexClient GetSearchIndexClient()
-        {
-            var searchService = GetServiceClient();
-            var searchIndexClient = searchService.Indexes.Exists(_indexName) ? searchService.Indexes.GetClient(_indexName) : null;
-            if (searchIndexClient != null) return searchIndexClient;
-            var datasource = $"{_containerName}-wordblob-datasource";
-            var indexer = $"{_containerName}-wordblob-indexer";
-            searchService.DataSources
-                .CreateOrUpdate(datasource, DataSource.AzureBlobStorage(datasource, _connectionString, _cloudBlobContainer.Name));
-            searchService.Indexes.CreateOrUpdate(_indexName, new Index(_indexName,
-                new List<Field>
-                {
-                    new Field() {Name = "content", Type = DataType.String, IsRetrievable = true, IsSearchable = true},
-                    new Field() {Name = "metadata_storage_path",Type = DataType.String,  IsKey = true, IsRetrievable = true}
-                }));
-            searchService.Indexers.CreateOrUpdate(new Indexer(indexer, datasource, _indexName,
-                fieldMappings: new List<FieldMapping>
-                {
-                    new FieldMapping("metadata_storage_path", FieldMappingFunction.Base64Encode()) //key cannot be an url therefore Encode it.
-                }));
-            Thread.Sleep(2000); //Wait till index is build
-            searchIndexClient = searchService.Indexes.GetClient(_indexName);
-            return searchIndexClient;
-        }
+        public List<Uri> Search(string indexName, string keyword, Filter filter) =>
+                GetSearchServiceClient(indexName)
+                .Documents
+                .Search(keyword, new SearchParameters { Filter = $"{filter.FieldName} {filter.FilterOperator.ToString()} '{filter.Value}'" })
+                .Results.Select(r =>
+                    r.Document["metadata_storage_path"]
+                        .ToString()
+                        .DecodeStoragePath()
+                        .AddToken(BaseContainer))
+                .ConvertToUri()
+                .ToList();
+
+        private ISearchIndexClient GetSearchServiceClient(string indexName) =>
+            SearchServiceClient.Indexes.Exists(indexName) ? SearchServiceClient.Indexes.GetClient(indexName) : null;
 
     }
 }

@@ -7,10 +7,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Citolab.Azure.BlobStorage.S
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{937E4127-E583-40C7-99C0-34F4878B0740}"
 	ProjectSection(SolutionItems) = preProject
+		TestApp\Program.cs = TestApp\Program.cs
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Citolab.Azure.BlobStorage.Search.Extensions", "Citolab.Azure.BlobStorage.Search.Extensions\Citolab.Azure.BlobStorage.Search.Extensions.csproj", "{4C72A7EB-D9AC-4D76-88C4-67879CA4C41A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Citolab.Azure.BlobStorage.Search.Extensions", "Citolab.Azure.BlobStorage.Search.Extensions\Citolab.Azure.BlobStorage.Search.Extensions.csproj", "{4C72A7EB-D9AC-4D76-88C4-67879CA4C41A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{116ACB51-3678-4C14-A3D8-58DF21A588AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{03EF0A7E-70FA-4408-B593-53B4B405113C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,9 +31,16 @@ Global
 		{4C72A7EB-D9AC-4D76-88C4-67879CA4C41A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C72A7EB-D9AC-4D76-88C4-67879CA4C41A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C72A7EB-D9AC-4D76-88C4-67879CA4C41A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{116ACB51-3678-4C14-A3D8-58DF21A588AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{116ACB51-3678-4C14-A3D8-58DF21A588AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{116ACB51-3678-4C14-A3D8-58DF21A588AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{116ACB51-3678-4C14-A3D8-58DF21A588AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{116ACB51-3678-4C14-A3D8-58DF21A588AD} = {03EF0A7E-70FA-4408-B593-53B4B405113C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2581F12B-0893-4AEB-B8B9-F6F6458775A6}
