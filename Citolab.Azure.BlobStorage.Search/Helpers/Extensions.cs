@@ -21,18 +21,21 @@ namespace Citolab.Azure.BlobStorage.Search.Helpers
         public static string UrlEncode(this string path) =>
             WebUtility.UrlEncode(path);
 
+        public static string AddToken(this string url, CloudBlobContainer container, DateTimeOffset sharedAccessExpiryTime, DateTimeOffset sharedAccessStartTime) =>
+            string.Concat(url, container.SharedAccessBlobPolicy(sharedAccessExpiryTime, sharedAccessStartTime));
+
         public static string AddToken(this string url, CloudBlobContainer container) =>
-            string.Concat(url, container.SharedAccessBlobPolicy());
+            string.Concat(url, container.SharedAccessBlobPolicy(DateTimeOffset.UtcNow.AddDays(7), DateTimeOffset.UtcNow.AddDays(-1)));
 
         public static IEnumerable<Uri> ConvertToUri(this IEnumerable<string> list) =>
             list.Select(uriString => Uri.TryCreate(uriString, UriKind.Absolute, out var uri) ? uri : null)
                 .Where(u => u != null);
 
-        private static string SharedAccessBlobPolicy(this CloudBlobContainer container) =>
+        private static string SharedAccessBlobPolicy(this CloudBlobContainer container, DateTimeOffset sharedAccessExpiryTime, DateTimeOffset sharedAccessStartTime) =>
             container.GetSharedAccessSignature(new SharedAccessBlobPolicy
             {
-                SharedAccessExpiryTime = DateTimeOffset.UtcNow.AddDays(7),
-                SharedAccessStartTime = DateTimeOffset.UtcNow.AddDays(-1),
+                SharedAccessExpiryTime = sharedAccessExpiryTime,
+                SharedAccessStartTime = sharedAccessStartTime,
                 Permissions = SharedAccessBlobPermissions.Read
             });
     }

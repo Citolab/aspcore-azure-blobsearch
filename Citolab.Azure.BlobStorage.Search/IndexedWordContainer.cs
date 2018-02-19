@@ -40,7 +40,11 @@ namespace Citolab.Azure.BlobStorage.Search
                 .ConvertToUri()
                 .ToList();
 
-
+        public Uri Get(string name) =>
+              Uri.TryCreate(BaseContainer.GetBlockBlobReference(name)
+                .Uri.ToString().AddToken(BaseContainer), UriKind.Absolute, out var result) ? 
+                    result: null;
+            
         public List<Uri> Search(string indexName, string keyword, Filter filter) =>
                 GetSearchServiceClient(indexName)
                 .Documents
