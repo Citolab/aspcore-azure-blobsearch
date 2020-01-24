@@ -21,7 +21,7 @@ namespace Citolab.Azure.BlobStorage.Search
 
         public IndexedWordContainer(string connectionString, string containerName, Uri searchUrl, string searchApiKey)
         {
-            SearchServiceClient = new SearchServiceClient(searchUrl, new SearchCredentials(searchApiKey));
+            SearchServiceClient = new SearchServiceClient(searchUrl.ToString(), new SearchCredentials(searchApiKey));
             BaseContainer = CloudHelper.GetCloudBlobContainer(connectionString, containerName);
         }
 

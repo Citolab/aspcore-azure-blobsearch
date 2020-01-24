@@ -1,15 +1,15 @@
-﻿using Citolab.Azure.BlobStorage.Search;
+﻿using System;
+using Citolab.Azure.BlobStorage.Search;
 using Citolab.Azure.BlobStorage.Search.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Citolab.Azure.BlobStorage.Search.Helpers;
 using Microsoft.Azure.Search.Models;
-using System.Threading;
+using Index = Microsoft.Azure.Search.Models.Index;
 
 namespace TestApp
 {
@@ -47,7 +47,11 @@ namespace TestApp
             //3 add index
             var index = container.GetOrCreateIndex(new Index(indexName, new List<Field>())
                                                     .AddDefaultWordFields()
-                                                    .AddField(new Field() { Name = "subject", Type = DataType.String, IsFilterable = true }));
+                                                    .AddField(new Field("subject", AnalyzerName.NlLucene)
+                                                    {
+                                                        Type = DataType.String,
+                                                        IsFilterable = true
+                                                    }));
             //4 add datasource + indexer
             container
                 .CreateDatasourceIfNotExists($"{container.Name}-datasource", configuration.GetValue<string>("BlobStorage:ConnectionString"))

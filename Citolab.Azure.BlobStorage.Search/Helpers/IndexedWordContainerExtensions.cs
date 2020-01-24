@@ -1,6 +1,5 @@
 ﻿using Microsoft.Azure.Search.Models;
 using Microsoft.WindowsAzure.Storage.Blob;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
