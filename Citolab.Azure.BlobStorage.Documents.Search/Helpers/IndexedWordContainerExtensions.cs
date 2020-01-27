@@ -1,5 +1,4 @@
 ﻿using Microsoft.Azure.Search.Models;
-using Microsoft.WindowsAzure.Storage.Blob;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -60,7 +59,8 @@ namespace Citolab.Azure.BlobStorage.Search.Helpers
 
         public static Indexer AddFieldMapping(this Indexer indexer, IndexedWordContainer container, FieldMapping mapping)
         {
-            if (!indexer.FieldMappings.Any(f => f.SourceFieldName == mapping.SourceFieldName))
+            if (!indexer.FieldMappings.Any(f =>
+                f.SourceFieldName == mapping.SourceFieldName))
             {
                 indexer.FieldMappings.Add(mapping);
                 return container.SearchServiceClient.Indexers.CreateOrUpdate(indexer);

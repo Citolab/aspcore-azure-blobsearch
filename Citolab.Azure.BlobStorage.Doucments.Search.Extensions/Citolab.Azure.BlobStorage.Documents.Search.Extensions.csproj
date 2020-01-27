@@ -7,6 +7,7 @@
     <RepositoryUrl>https://github.com/Citolab/aspcore-azure-blobsearch</RepositoryUrl>
     <PackageTags>documents index search blobstorage blobs</PackageTags>
     <Version>0.0.1</Version>
+    <Description>Helper to upload documents to Azure blob storage. Makes it easy to do full text search on uploaded documents</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,5 +19,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\LICENSE.txt" Pack="true" PackagePath="" />
+    <None Include="..\logo.png" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>

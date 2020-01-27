@@ -10,10 +10,10 @@ namespace Citolab.Azure.BlobStorage.Search.Helpers
 {
     public static class CloudBlockBlobExtension
     {
-        public static CloudBlockBlob GetOrCreateBlobByUploadingDocument(this CloudBlockBlob blockBlob, string filePath, bool overwrite)
+        public static async Task<CloudBlockBlob> GetOrCreateBlobByUploadingDocument(this CloudBlockBlob blockBlob, string filePath, bool overwrite)
         {
             if (blockBlob.ExistsAsync().Result && !overwrite) return blockBlob;
-            blockBlob.UploadFromFileAsync(filePath).Wait();
+            await blockBlob.UploadFromFileAsync(filePath);
             return blockBlob;
         }
 
@@ -26,11 +26,11 @@ namespace Citolab.Azure.BlobStorage.Search.Helpers
             return await taskCompletion.Task;
         }
         
-        public static CloudBlob AddMetaData(this CloudBlockBlob blob, string key, string value)
+        public static async Task<CloudBlob> AddMetaData(this CloudBlockBlob blob, string key, string value)
         {
             if (!blob.Metadata.ContainsKey(key)) {
                 blob.Metadata.Add(new KeyValuePair<string, string>(key, value));
-                blob.SetMetadataAsync().Wait();
+                await blob.SetMetadataAsync();
             }
             return blob;
         }
