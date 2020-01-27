@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -14,6 +14,6 @@
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Citolab.Azure.BlobStorage.Search.Extensions\Citolab.Azure.BlobStorage.Search.Extensions.csproj" />
+    <ProjectReference Include="..\Citolab.Azure.BlobStorage.Doucments.Search.Extensions\Citolab.Azure.BlobStorage.Documents.Search.Extensions.csproj" />
   </ItemGroup>
 </Project>

@@ -1,21 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Citolab.Azure.BlobStorage.Search", "Citolab.Azure.BlobStorage.Search\Citolab.Azure.BlobStorage.Search.csproj", "{8992255A-5281-4E5A-B541-56C49039FEEC}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{937E4127-E583-40C7-99C0-34F4878B0740}"
 	ProjectSection(SolutionItems) = preProject
 		TestApp\Program.cs = TestApp\Program.cs
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Citolab.Azure.BlobStorage.Search.Extensions", "Citolab.Azure.BlobStorage.Search.Extensions\Citolab.Azure.BlobStorage.Search.Extensions.csproj", "{4C72A7EB-D9AC-4D76-88C4-67879CA4C41A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{116ACB51-3678-4C14-A3D8-58DF21A588AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestApp", "TestApp\TestApp.csproj", "{116ACB51-3678-4C14-A3D8-58DF21A588AD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{03EF0A7E-70FA-4408-B593-53B4B405113C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Citolab.Azure.BlobStorage.Documents.Search", "Citolab.Azure.BlobStorage.Documents.Search\Citolab.Azure.BlobStorage.Documents.Search.csproj", "{4052B9CB-99E2-4005-A0CB-E20DE98DCA8E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Citolab.Azure.BlobStorage.Documents.Search.Extensions", "Citolab.Azure.BlobStorage.Doucments.Search.Extensions\Citolab.Azure.BlobStorage.Documents.Search.Extensions.csproj", "{100FBEC7-AD5C-4F8D-808C-3D3E4F611633}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,18 +23,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8992255A-5281-4E5A-B541-56C49039FEEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8992255A-5281-4E5A-B541-56C49039FEEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8992255A-5281-4E5A-B541-56C49039FEEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8992255A-5281-4E5A-B541-56C49039FEEC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4C72A7EB-D9AC-4D76-88C4-67879CA4C41A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4C72A7EB-D9AC-4D76-88C4-67879CA4C41A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4C72A7EB-D9AC-4D76-88C4-67879CA4C41A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4C72A7EB-D9AC-4D76-88C4-67879CA4C41A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{116ACB51-3678-4C14-A3D8-58DF21A588AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{116ACB51-3678-4C14-A3D8-58DF21A588AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{116ACB51-3678-4C14-A3D8-58DF21A588AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{116ACB51-3678-4C14-A3D8-58DF21A588AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4052B9CB-99E2-4005-A0CB-E20DE98DCA8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4052B9CB-99E2-4005-A0CB-E20DE98DCA8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4052B9CB-99E2-4005-A0CB-E20DE98DCA8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4052B9CB-99E2-4005-A0CB-E20DE98DCA8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{100FBEC7-AD5C-4F8D-808C-3D3E4F611633}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{100FBEC7-AD5C-4F8D-808C-3D3E4F611633}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{100FBEC7-AD5C-4F8D-808C-3D3E4F611633}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{100FBEC7-AD5C-4F8D-808C-3D3E4F611633}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,4 @@
-﻿# Citolab.Azure.BlobStorage.Search
+﻿# Citolab.Azure.BlobStorage.Documents.Search
 
 This is a repository library that helps uploading and searching word documents in Azure Blob Storage
 

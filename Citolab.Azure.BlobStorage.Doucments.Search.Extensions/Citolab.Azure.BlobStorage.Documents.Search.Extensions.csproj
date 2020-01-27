@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Citolab.Azure.BlobStorage.Search\Citolab.Azure.BlobStorage.Search.csproj" />
+    <ProjectReference Include="..\Citolab.Azure.BlobStorage.Documents.Search\Citolab.Azure.BlobStorage.Documents.Search.csproj" />
   </ItemGroup>
 
 </Project>
