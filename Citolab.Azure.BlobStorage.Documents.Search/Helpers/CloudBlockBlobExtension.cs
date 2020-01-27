@@ -1,10 +1,10 @@
-﻿using Microsoft.WindowsAzure.Storage.Blob;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Azure.Storage.Blob;
 
 namespace Citolab.Azure.BlobStorage.Search.Helpers
 {

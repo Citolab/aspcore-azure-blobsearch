@@ -5,7 +5,7 @@ using System.Threading;
 using Citolab.Azure.BlobStorage.Search.Helpers;
 using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
-using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.Azure.Storage.Blob;
 
 namespace Citolab.Azure.BlobStorage.Search
 {

@@ -38,12 +38,15 @@ namespace TestApp
             var container = storage.GetOrCreateContainer("algemeen");
             var indexName = $"{container.Name}-index";
            // 2.create blobs with documents
-            Directory.GetFiles(@"C:\tmp\docs", "*.docx")
-                .ToList()
-                .ForEach(filename => container
-                                    .GetBlockBlobReference(Path.GetFileNameWithoutExtension(filename))
-                                    .GetOrCreateBlobByUploadingDocument(filename, false)
-                                    .AddMetaData("subject", "math"));
+           Directory.GetFiles(@"C:\tmp\docs", "*.docx")
+               .ToList()
+               .ForEach(async filename =>
+               {
+                   var block = await container
+                       .GetBlockBlobReference(Path.GetFileNameWithoutExtension(filename))
+                       .GetOrCreateBlobByUploadingDocument(filename, false);
+                   await block.AddMetaData("subject", "math");
+               });
             //3 add index
             var index = container.GetOrCreateIndex(new Index(indexName, new List<Field>())
                                                     .AddDefaultWordFields()
