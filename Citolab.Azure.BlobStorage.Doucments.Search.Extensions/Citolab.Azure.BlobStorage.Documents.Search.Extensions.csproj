@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <Authors>Citolab</Authors>
+    <RepositoryUrl>https://github.com/Citolab/aspcore-azure-blobsearch</RepositoryUrl>
+    <PackageTags>documents index search blobstorage blobs</PackageTags>
+    <Version>0.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,5 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Citolab.Azure.BlobStorage.Documents.Search\Citolab.Azure.BlobStorage.Documents.Search.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <None Include="..\LICENSE.txt" Pack="true" PackagePath="" />
+  </ItemGroup>
 </Project>
