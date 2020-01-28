@@ -18,13 +18,19 @@ This is a repository library that helps uploading and searching word documents i
     // 1. create container
     var container = storage.GetOrCreateContainer("algemeen");
     var indexName = $"{container.Name}-index";
+
     // 2.create blobs with documents
-    Directory.GetFiles(@"C:\tmp\docs", "*.docx")
+    new DirectoryInfo(configuration.GetValue<string>("AppSettings:DocumentFolder"))
+        .GetFiles("*.*", SearchOption.AllDirectories)
+        .Where(d => d.Extension == ".docx" || d.Extension == ".doc" || d.Extension == ".pdf")
         .ToList()
-        .ForEach(filename => container
-                            .GetBlockBlobReference(Path.GetFileNameWithoutExtension(filename))
-                            .GetOrCreateBlobByUploadingDocument(filename, false)
-                            .AddMetaData("subject", "math"));
+        .ForEach(async filename =>
+        {
+            await container.UploadDocument(filename.FullName, metaData: new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("subject", "math")
+            });
+        });
     //3 add index
     var index = container.GetOrCreateIndex(new Index(indexName, new List<Field>())
                                             .AddDefaultWordFields()
@@ -40,5 +46,3 @@ This is a repository library that helps uploading and searching word documents i
     var searchResult = container.Search(indexName, "mayonaise", new Filter("subject", FilterOperator.eq, "math"));
     searchResult.ForEach(s => logger.LogInformation($"result found: {s.ToString()}"));
 ```
-
-The urls that are returned can be used for 7 days.

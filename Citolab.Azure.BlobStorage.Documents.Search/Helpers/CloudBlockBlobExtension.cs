@@ -14,15 +14,22 @@ namespace Citolab.Azure.BlobStorage.Search.Helpers
         {
             if (blockBlob.ExistsAsync().Result && !overwrite) return blockBlob;
             await blockBlob.UploadFromFileAsync(filePath);
+            blockBlob.Properties.ContentType = Path.GetExtension(filePath).GetMimeType();
+            await blockBlob.SetPropertiesAsync();
             return blockBlob;
         }
 
-        public static async Task<CloudBlockBlob> GetOrCreateBlobByUploadingDocument(this CloudBlockBlob blockBlob, Stream stream, bool overwrite)
+        public static async Task<CloudBlockBlob> GetOrCreateBlobByUploadingDocument(this CloudBlockBlob blockBlob, Stream stream, bool overwrite, string fileExtension = "")
         {
             if (blockBlob.ExistsAsync().Result && !overwrite) return await Task.FromResult(blockBlob);
             var taskCompletion = new TaskCompletionSource<CloudBlockBlob>();
             var _ = blockBlob.UploadFromStreamAsync(stream).ContinueWith(result =>
                 taskCompletion.SetResult(blockBlob));
+            if (!string.IsNullOrEmpty(fileExtension))
+            {
+                blockBlob.Properties.ContentType = Path.GetExtension(fileExtension);
+                await blockBlob.SetPropertiesAsync();
+            }
             return await taskCompletion.Task;
         }
         

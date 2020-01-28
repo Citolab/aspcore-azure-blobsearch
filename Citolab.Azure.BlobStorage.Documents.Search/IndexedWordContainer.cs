@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Citolab.Azure.BlobStorage.Search.Helpers;
 using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
@@ -19,10 +21,30 @@ namespace Citolab.Azure.BlobStorage.Search
         //private readonly string _indexName;
         //private readonly string _searchApiKey;
 
-        public IndexedWordContainer(string connectionString, string containerName, Uri searchUrl, string searchApiKey)
+        public IndexedWordContainer(string connectionString, string containerName, string searchServiceName, string searchApiKey)
         {
-            SearchServiceClient = new SearchServiceClient(searchUrl.ToString(), new SearchCredentials(searchApiKey));
+            SearchServiceClient = new SearchServiceClient(searchServiceName, new SearchCredentials(searchApiKey));
             BaseContainer = CloudHelper.GetCloudBlobContainer(connectionString, containerName);
+        }
+
+        public async Task<Uri> UploadDocument(Stream stream, string fileName, bool overwrite = false)
+        {
+            var block = await 
+                GetBlockBlobReference(Path.GetFileNameWithoutExtension(fileName))
+                .GetOrCreateBlobByUploadingDocument(stream, overwrite, Path.GetExtension(fileName));
+            return block?.Uri;
+        }
+
+        public async Task<Uri> UploadDocument(string filePath, bool overwrite = false, List<KeyValuePair<string, string>> metaData = null)
+        {
+            var block = await
+                GetBlockBlobReference(Path.GetFileNameWithoutExtension(filePath))
+                    .GetOrCreateBlobByUploadingDocument(filePath, overwrite);
+            metaData?.ForEach(async data =>
+            {
+                await block.AddMetaData(data.Key, data.Value);
+            });
+            return block?.Uri;
         }
 
         public CloudBlockBlob GetBlockBlobReference(string name) =>

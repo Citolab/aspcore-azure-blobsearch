@@ -7,18 +7,18 @@ namespace Citolab.Azure.BlobStorage.Search
     public class IndexedBlobStorage : IIndexedBlobStorage
     {
         private readonly string _blobConnectionString;
-        private readonly Uri _searchUrl;
+        private readonly string _searchServiceName;
         private readonly string _searchApiKey;
 
-        public IndexedBlobStorage(string blobConnectionString, Uri searchUrl, string searchApiKey)
+        public IndexedBlobStorage(string blobConnectionString, string searchServiceName, string searchApiKey)
         {
             _blobConnectionString = blobConnectionString;
-            _searchUrl = searchUrl;
+            _searchServiceName = searchServiceName;
             _searchApiKey = searchApiKey;
         }
 
         public IndexedWordContainer GetOrCreateContainer(string containername) =>
-           new IndexedWordContainer(_blobConnectionString, containername, _searchUrl,  _searchApiKey);
+           new IndexedWordContainer(_blobConnectionString, containername, _searchServiceName,  _searchApiKey);
 
     }
 }

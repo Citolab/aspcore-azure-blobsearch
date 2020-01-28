@@ -1,7 +1,5 @@
 ﻿using Microsoft.Azure.Search.Models;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.Azure.Search;
@@ -11,22 +9,25 @@ namespace Citolab.Azure.BlobStorage.Search.Helpers
 {
     public static class IndexedWordContainerExtensions
     {
-        public static Index GetOrCreateIndex(this IndexedWordContainer container, Index index) =>
-            container.SearchServiceClient.Indexes.Exists(index.Name) ?
-                container.SearchServiceClient.Indexes.Get(index.Name) :
-                container.SearchServiceClient.Indexes.CreateOrUpdate(index);
-
-
-        public static IndexedWordContainer CreateDatasourceIfNotExists(this IndexedWordContainer container, string name, string connectionstring)
+        public static async Task<Index> GetOrCreateIndex(this IndexedWordContainer container, Index index)
         {
-            var _ = container.SearchServiceClient.DataSources.Exists(name) ?
-                container.SearchServiceClient.DataSources.Get(name) :
-                container.SearchServiceClient.DataSources.CreateOrUpdate(DataSource.AzureBlobStorage(name, connectionstring, container.Name));
+            if ( await container.SearchServiceClient.Indexes.ExistsAsync(index.Name))
+            {
+                return await container.SearchServiceClient.Indexes.GetAsync(index.Name);
+            }
+            return await container.SearchServiceClient.Indexes.CreateOrUpdateAsync(index);
+        }
+
+        public static async Task<IndexedWordContainer> CreateDatasourceIfNotExists(this IndexedWordContainer container, string name, string connectionstring)
+        {
+            var _ = await container.SearchServiceClient.DataSources.ExistsAsync(name) ?
+                await container.SearchServiceClient.DataSources.GetAsync(name) :
+                await container.SearchServiceClient.DataSources.CreateOrUpdateAsync(DataSource.AzureBlobStorage(name, connectionstring, container.Name));
             return container;
         }
-        public static Indexer CreateIndexerIfNotExists(this IndexedWordContainer container, string name, string datasourceName, string indexName, FieldMapping[] mapping) =>
-            container.SearchServiceClient.Indexers.Exists(name) ?
-                container.SearchServiceClient.Indexers.Get(name) :
+        public static async Task<Indexer> CreateIndexerIfNotExists(this IndexedWordContainer container, string name, string datasourceName, string indexName, FieldMapping[] mapping) =>
+            await container.SearchServiceClient.Indexers.ExistsAsync(name) ?
+                await container.SearchServiceClient.Indexers.GetAsync(name) : 
                 Task.Run(() =>
                 {
                     var indexer = container.SearchServiceClient.Indexers.CreateOrUpdate(new Indexer(name, datasourceName, indexName,
@@ -40,14 +41,14 @@ namespace Citolab.Azure.BlobStorage.Search.Helpers
                     return indexer;
                 }).Result;
 
-        public static IndexedWordContainer RebuildIndexes(this IndexedWordContainer container)
+        public static async Task<IndexedWordContainer> RebuildIndexes(this IndexedWordContainer container)
         {
-            var list = container.SearchServiceClient.Indexers.List();
-            list.Indexers.ToList().ForEach(i =>
+            var list = await container.SearchServiceClient.Indexers.ListAsync();
+            list.Indexers.ToList().ForEach(async i =>
             {
                 try
                 {
-                    container.SearchServiceClient.Indexers.Run(i.Name);
+                    await container.SearchServiceClient.Indexers.RunAsync(i.Name);
                 }
                 catch
                 { // do nothing;
@@ -57,15 +58,11 @@ namespace Citolab.Azure.BlobStorage.Search.Helpers
             return container;
         }
 
-        public static Indexer AddFieldMapping(this Indexer indexer, IndexedWordContainer container, FieldMapping mapping)
+        public static async Task<Indexer> AddFieldMapping(this Indexer indexer, IndexedWordContainer container, FieldMapping mapping)
         {
-            if (!indexer.FieldMappings.Any(f =>
-                f.SourceFieldName == mapping.SourceFieldName))
-            {
-                indexer.FieldMappings.Add(mapping);
-                return container.SearchServiceClient.Indexers.CreateOrUpdate(indexer);
-            }
-            return indexer;
+            if (indexer.FieldMappings.Any(f => f.SourceFieldName == mapping.SourceFieldName)) return indexer;
+            indexer.FieldMappings.Add(mapping);
+            return await container.SearchServiceClient.Indexers.CreateOrUpdateAsync(indexer);
         }
     }
 }

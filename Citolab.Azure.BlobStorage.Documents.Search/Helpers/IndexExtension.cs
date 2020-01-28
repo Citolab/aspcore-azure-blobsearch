@@ -13,10 +13,11 @@ namespace Citolab.Azure.BlobStorage.Search.Helpers
             if (!index.Fields.Exists("content"))
             {
                 var analyzer = useLucine ? "lucene" : "microsoft";
+                
                 var item = new Field("content", AnalyzerName.EnMicrosoft)
                 {
 
-                    Analyzer = $"{language.ToLower()}-{analyzer}",
+                    Analyzer = $"{language.ToLower()}.{analyzer}",
                     Name = "content",
                     Type = DataType.String,
                     IsRetrievable = true,
@@ -28,7 +29,8 @@ namespace Citolab.Azure.BlobStorage.Search.Helpers
             {
                 index.Fields.Add(new Field("metadata_storage_path", AnalyzerName.NlLucene)
                 {
-                    Type = DataType.String
+                    Type = DataType.String,
+                    IsKey = true
                 });
             }
             return index;
