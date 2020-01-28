@@ -29,7 +29,7 @@ namespace TestApp
             var configuration = builder.Build();
             services.AddBlobStorage(new BlobSettings(
                 configuration.GetValue<string>("BlobStorage:ConnectionString"),
-                configuration.GetValue<string>("BlobStorage:SearchUrl"),
+                configuration.GetValue<string>("BlobStorage:SearchServiceName"),
                 configuration.GetValue<string>("BlobStorage:ApiKey")));
             IServiceProvider provider = services.BuildServiceProvider();
             var storage = provider.GetService<IIndexedBlobStorage>();
@@ -61,16 +61,15 @@ namespace TestApp
              );
             //4 add datasource + indexer
             var datasource = await container
-                .CreateDatasourceIfNotExists($"{container.Name}-datasource",
-                    configuration.GetValue<string>("BlobStorage:ConnectionString"));
+                .CreateDatasourceIfNotExists($"{container.Name}-datasource");
 
             await datasource.CreateIndexerIfNotExists($"{container.Name}-indexer", $"{container.Name}-datasource", index.Name, new List<FieldMapping>
                 {
                     new FieldMapping("metadata_storage_path", FieldMappingFunction.Base64Encode()) //key cannot be an url therefore Encode it.
                 }.ToArray());
             //5. Search for words within a subject.
-            var searchResult = container.Search(indexName, "boodschappen");
-            searchResult.ForEach(s => logger.LogInformation($"result found: {s.ToString()}"));
+            var searchResult = container.Search(indexName, "Something to search for");
+            searchResult.ForEach(s => logger.LogInformation($"result found: {s}"));
 
         }
     }

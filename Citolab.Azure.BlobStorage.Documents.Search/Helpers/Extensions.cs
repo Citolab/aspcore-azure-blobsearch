@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Azure.Search;
+using Microsoft.Azure.Search.Models;
 using Microsoft.Azure.Storage.Blob;
 
 namespace Citolab.Azure.BlobStorage.Search.Helpers
@@ -42,7 +44,12 @@ namespace Citolab.Azure.BlobStorage.Search.Helpers
                 SharedAccessStartTime = sharedAccessStartTime,
                 Permissions = SharedAccessBlobPermissions.Read
             });
-
+        public static async Task<Indexer> AddFieldMapping(this Indexer indexer, IndexedWordContainer container, FieldMapping mapping)
+        {
+            if (indexer.FieldMappings.Any(f => f.SourceFieldName == mapping.SourceFieldName)) return indexer;
+            indexer.FieldMappings.Add(mapping);
+            return await container.SearchServiceClient.Indexers.CreateOrUpdateAsync(indexer);
+        }
         public static string GetMimeType(this string extension )
         {
             switch (extension)

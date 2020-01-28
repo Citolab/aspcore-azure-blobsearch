@@ -17,12 +17,11 @@ namespace Citolab.Azure.BlobStorage.Search
 
         public SearchServiceClient SearchServiceClient { get; set; }
         public CloudBlobContainer BaseContainer;
-        //private readonly Uri _searchUrl;
-        //private readonly string _indexName;
-        //private readonly string _searchApiKey;
+        private string _storageConnectionString = "";
 
         public IndexedWordContainer(string connectionString, string containerName, string searchServiceName, string searchApiKey)
         {
+            _storageConnectionString = connectionString;
             SearchServiceClient = new SearchServiceClient(searchServiceName, new SearchCredentials(searchApiKey));
             BaseContainer = CloudHelper.GetCloudBlobContainer(connectionString, containerName);
         }
@@ -78,6 +77,62 @@ namespace Citolab.Azure.BlobStorage.Search
                         .AddToken(BaseContainer))
                 .ConvertToUri()
                 .ToList();
+        
+        public async Task<Microsoft.Azure.Search.Models.Index> GetOrCreateIndex(Microsoft.Azure.Search.Models.Index index)
+        {
+            if (await SearchServiceClient.Indexes.ExistsAsync(index.Name))
+            {
+                return await SearchServiceClient.Indexes.GetAsync(index.Name);
+            }
+            return await SearchServiceClient.Indexes.CreateOrUpdateAsync(index);
+        }
+
+        public async Task<IndexedWordContainer> CreateDatasourceIfNotExists(string name)
+        {
+            if (await SearchServiceClient.DataSources.ExistsAsync(name))
+            {
+                await SearchServiceClient.DataSources.GetAsync(name);
+            }
+            else
+            {
+                await SearchServiceClient.DataSources.CreateOrUpdateAsync(
+                    DataSource.AzureBlobStorage(name, _storageConnectionString, Name));
+            }
+            return this;
+        }
+        public  async Task<Indexer> CreateIndexerIfNotExists(string name, string datasourceName, string indexName, FieldMapping[] mapping) =>
+            await SearchServiceClient.Indexers.ExistsAsync(name) ?
+                await SearchServiceClient.Indexers.GetAsync(name) :
+                Task.Run(() =>
+                {
+                    var indexer = SearchServiceClient.Indexers.CreateOrUpdate(new Indexer(name, datasourceName, indexName,
+                        fieldMappings: new List<FieldMapping>
+                        {
+                            new FieldMapping("metadata_storage_path", FieldMappingFunction.Base64Encode()) //key cannot be an url therefore Encode it.
+                        }));
+                    Thread.Sleep(1000);
+                    SearchServiceClient.Indexers.Run(name);
+                    Thread.Sleep(1000);
+                    return indexer;
+                }).Result;
+
+        public async Task<IndexedWordContainer> RebuildIndexes()
+        {
+            var list = await SearchServiceClient.Indexers.ListAsync();
+            list.Indexers.ToList().ForEach(async i =>
+            {
+                try
+                {
+                    await SearchServiceClient.Indexers.RunAsync(i.Name);
+                }
+                catch
+                { // do nothing;
+                }
+
+            });
+            return this;
+        }
+
 
         private ISearchIndexClient GetSearchServiceClient(string indexName) =>
             SearchServiceClient.Indexes.Exists(indexName) ? SearchServiceClient.Indexes.GetClient(indexName) : null;
